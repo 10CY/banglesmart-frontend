@@ -1,5 +1,5 @@
 "use client";
-
+import { Suspense } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -85,7 +85,7 @@ const mainNavigation = [
   },
 ];
 
-export default function Header() {
+ function HeaderContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -1557,5 +1557,13 @@ function MobileLink({
       ) : null}
 
     </Link>
+  );
+}
+
+export default function Header() {
+  return (
+    <Suspense fallback={null}>
+      <HeaderContent />
+    </Suspense>
   );
 }

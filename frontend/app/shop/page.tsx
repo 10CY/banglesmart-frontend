@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Sparkles, SlidersHorizontal, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-
+import { Suspense } from "react";
 import { storeApiFetch } from "@/lib/storeApi";
 
 import CategoryFilters, {
@@ -85,7 +85,7 @@ function ProductSkeleton() {
    PAGE
 ========================================================= */
 
-export default function ShopPage() {
+function ShopPageContent() {
   const searchParams = useSearchParams();
 
   /* =======================================================
@@ -1232,5 +1232,13 @@ export default function ShopPage() {
       )}
 
     </main>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense fallback={null}>
+      <ShopPageContent />
+    </Suspense>
   );
 }

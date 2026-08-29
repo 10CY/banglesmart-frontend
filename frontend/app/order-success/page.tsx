@@ -1,7 +1,6 @@
 "use client";
-
+import { Suspense } from "react";
 import {
-  Suspense,
   useEffect,
   useState,
 } from "react";
@@ -401,15 +400,7 @@ function OrderSuccessContent() {
 
 export default function OrderSuccessPage() {
   return (
-    <Suspense
-      fallback={
-        <main className="flex min-h-screen items-center justify-center bg-gray-50">
-          <p className="text-sm text-gray-500">
-            Loading order...
-          </p>
-        </main>
-      }
-    >
+    <Suspense fallback={null}>
       <OrderSuccessContent />
     </Suspense>
   );
