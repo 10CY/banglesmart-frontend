@@ -20,15 +20,15 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-COPY composer.json composer.lock ./
+# Copy all Laravel files first
+COPY . .
 
+# Install Laravel dependencies
 RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader
-
-COPY . .
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
