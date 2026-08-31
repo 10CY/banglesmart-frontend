@@ -1,5 +1,5 @@
 "use client";
-
+import { apiFetch } from "@/lib/api";
 import { Bell, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -23,26 +23,21 @@ export default function AdminTopbar() {
   }, []);
 
   async function handleLogout() {
-    const token = localStorage.getItem("admin_token");
+  try {
+    await apiFetch("/admin/logout", {
+      method: "POST",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+  } finally {
+    // Remove local authentication data
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_user");
 
-    try {
-      await fetch(
-        "http://127.0.0.1:8000/api/admin/logout",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } finally {
-      localStorage.removeItem("admin_token");
-      localStorage.removeItem("admin_user");
-
-      router.replace("/admin/login");
-    }
+    // Redirect to login page
+    router.replace("/admin/login");
   }
+}
 
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-6 border-b border-gray-200 bg-white px-6">

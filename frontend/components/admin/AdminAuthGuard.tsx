@@ -27,7 +27,10 @@ export default function AdminAuthGuard({
       const response = await apiFetch("/admin/me", {
         method: "GET",
       }); 
-
+      console.log(
+  "ADMIN API URL:",
+  process.env.NEXT_PUBLIC_API_URL
+);
       if (!response.ok) {
         localStorage.removeItem("admin_token");
         localStorage.removeItem("admin_user");
