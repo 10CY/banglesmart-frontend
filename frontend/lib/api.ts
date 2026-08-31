@@ -1,10 +1,10 @@
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
-  "http://127.0.0.1:8000/api";
+  "https://banglesmart-api.onrender.com/api";
 
 export const BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL ||
-  "http://127.0.0.1:8000";
+  "https://banglesmart-api.onrender.com";
 
 
 export async function apiFetch(
@@ -44,7 +44,7 @@ export async function apiFetch(
 
   /*
   |--------------------------------------------------------------------------
-  | Authorization
+  | Authorization code
   |--------------------------------------------------------------------------
   */
 
@@ -62,4 +62,4 @@ export async function apiFetch(
       headers,
     }
   );
-}
+} 

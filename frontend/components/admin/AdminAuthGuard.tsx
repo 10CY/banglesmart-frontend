@@ -1,5 +1,5 @@
 "use client";
-
+import { apiFetch } from "@/lib/api";
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -15,60 +15,44 @@ export default function AdminAuthGuard({
     useState(false);
 
   useEffect(() => {
-    async function checkAdmin() {
+  async function checkAdmin() {
+    const token = localStorage.getItem("admin_token");
 
-      const token = localStorage.getItem(
-        "admin_token"
-      );
+    if (!token) {
+      router.replace("/admin/login");
+      return;
+    }
 
-      if (!token) {
+    try {
+      const response = await apiFetch("/admin/me", {
+        method: "GET",
+      }); 
+
+      if (!response.ok) {
+        localStorage.removeItem("admin_token");
+        localStorage.removeItem("admin_user");
+
         router.replace("/admin/login");
         return;
       }
 
-      try {
+      setAuthenticated(true);
 
-        const response = await fetch(
-          "http://127.0.0.1:8000/api/admin/me",
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    } catch (error) {
+      console.error("Admin authentication error:", error);
 
-        if (!response.ok) {
+      localStorage.removeItem("admin_token");
+      localStorage.removeItem("admin_user");
 
-          localStorage.removeItem(
-            "admin_token"
-          );
+      router.replace("/admin/login");
 
-          localStorage.removeItem(
-            "admin_user"
-          );
-
-          router.replace("/admin/login");
-
-          return;
-        }
-
-        setAuthenticated(true);
-
-      } catch {
-
-        router.replace("/admin/login");
-
-      } finally {
-
-        setLoading(false);
-
-      }
+    } finally {
+      setLoading(false);
     }
+  }
 
-    checkAdmin();
-
-  }, [router]);
+  checkAdmin();
+}, [router]);
 
 
   if (loading) {
